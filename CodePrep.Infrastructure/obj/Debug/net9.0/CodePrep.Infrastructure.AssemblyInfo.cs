@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodePrep.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a47827c592652ab2b8d0b4bf8203cd3d69d8c063")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+99a180794a1e95bf988bf6ab80554dd4bafbcf88")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodePrep.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodePrep.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

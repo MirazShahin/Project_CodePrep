@@ -1867,7 +1867,8 @@
           "Mapster": "10.0.10",
           "Mapster.DependencyInjection": "10.0.10",
           "Microsoft.EntityFrameworkCore": "9.0.8",
-          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.8"
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.8",
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3"
         },
         "compile": {
           "bin/placeholder/CodePrep.Infrastructure.dll": {}
