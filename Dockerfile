@@ -2,10 +2,9 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copy solution file and project files
-COPY ["CodePrep.sln", "./"]
+# Copy solution file and project files (DevPrep.sln use korun)
+COPY ["DevPrep.sln", "./"]
 COPY ["CodePrep.API/CodePrep.API.csproj", "CodePrep.API/"]
-# (Jodi apnar aro onno project/class library thake, segulao ekhane copy korben)
 
 RUN dotnet restore "CodePrep.API/CodePrep.API.csproj"
 
