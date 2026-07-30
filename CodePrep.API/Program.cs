@@ -1,4 +1,4 @@
-﻿using CodePrep.API.Middlewares;
+using CodePrep.API.Middlewares;
 using CodePrep.Application.AI.Interfaces;
 using CodePrep.Application.AI.Services;
 using CodePrep.Application.Dashboard.Interfaces;
@@ -212,6 +212,26 @@ builder.Services.AddScoped<AIService>();
 // ==========================================
 
 var app = builder.Build();
+
+
+// ==========================================
+// Automatic Database Migration (Added)
+// ==========================================
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate(); // Render start howar shathe shathe database tables toiri kore felbe
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
 
 
 // ==========================================
