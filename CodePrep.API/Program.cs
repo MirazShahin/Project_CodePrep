@@ -11,6 +11,7 @@ using CodePrep.Application.Learning.Services;
 using CodePrep.Application.Problem.Interfaces;
 using CodePrep.Application.Problem.Services;
 using CodePrep.Application.Services;
+using CodePrep.Application.Topics.Interfaces;
 using CodePrep.Application.Validators;
 using CodePrep.Infrastructure.AI;
 using CodePrep.Infrastructure.Persistence;
@@ -26,28 +27,37 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
-using CodePrep.Application.Topics.Interfaces; 
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // ==========================================
-// 1. CORS Policy Configuration (ADDED)
+// CORS
 // ==========================================
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",
                 "http://localhost:3000",
-                "https://localhost:65067", 
-                "http://localhost:65067"
-              )
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+                "http://localhost:5173",
+                "http://localhost:65067",
+                "https://localhost:65067",
+
+                // Render Frontend URL
+                "https://codeprep-web.onrender.com"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
+
+
+// ==========================================
+// Controllers
+// ==========================================
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -56,13 +66,13 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter());
     });
 
-var config = TypeAdapterConfig.GlobalSettings;
-config.Scan(typeof(CodePrep.Application.Mapping.QuestionMapping).Assembly);
-builder.Services.AddSingleton(config);
-
-builder.Services.AddScoped<IMapper, ServiceMapper>();
-
 builder.Services.AddEndpointsApiExplorer();
+
+
+// ==========================================
+// Swagger
+// ==========================================
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -74,11 +84,11 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
+        Description = "Bearer {token}",
+        In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter your JWT token like this: Bearer {your token}"
+        BearerFormat = "JWT"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -86,10 +96,10 @@ builder.Services.AddSwaggerGen(options =>
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
+                Reference=new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                    Id="Bearer",
+                    Type=ReferenceType.SecurityScheme
                 }
             },
             Array.Empty<string>()
@@ -97,30 +107,65 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+
+// ==========================================
+// Database
+// ==========================================
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+
+// ==========================================
+// JWT Authentication
+// ==========================================
+
+builder.Services
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
 
-            IssuerSigningKey = new SymmetricSecurityKey(
+        IssuerSigningKey =
+            new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-        };
-    });
+    };
+});
+
+
+// ==========================================
+// Fluent Validation
+// ==========================================
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+
+
+// ==========================================
+// Mapster
+// ==========================================
+
+var config = TypeAdapterConfig.GlobalSettings;
+config.Scan(typeof(CodePrep.Application.Mapping.QuestionMapping).Assembly);
+
+builder.Services.AddSingleton(config);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
+
+
+// ==========================================
+// Dependency Injection
+// ==========================================
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -147,42 +192,47 @@ builder.Services.AddScoped<IInterviewService, InterviewService>();
 builder.Services.AddScoped<IProblemRepository, ProblemRepository>();
 builder.Services.AddScoped<IProblemService, ProblemService>();
 
-// Dashboard Dependencies
 builder.Services.AddScoped<IUserProblemRepository, UserProblemRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 builder.Services.AddScoped<IResourceLinkRepository, ResourceLinkRepository>();
-// Add HttpClient for Codeforces
+
 builder.Services.AddHttpClient<ICodeforcesService, CodeforcesService>();
+
 builder.Services.Configure<GeminiOptions>(
     builder.Configuration.GetSection(GeminiOptions.SectionName));
 
-// HttpClient & AI Provider Setup
 builder.Services.AddHttpClient<IAIProvider, GeminiProvider>();
+
 builder.Services.AddScoped<AIService>();
+
+
+// ==========================================
+// Build
+// ==========================================
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CodePrep API v1");
-    });
-}
 
-// Custom Exception Middleware
+// ==========================================
+// Middleware
+// ==========================================
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CodePrep API v1");
+});
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
-// ==========================================
-// 2. Enable CORS Middleware (ADDED HERE)
-// ==========================================
-// Routing/Middleware সিরিয়ালে UseCors সবসময় Authentication-এর আগে থাকতে হবে
 app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

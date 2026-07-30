@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "CodePrep.Domain/1.0.0": {
+        "runtime": {
+          "CodePrep.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CodePrep.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

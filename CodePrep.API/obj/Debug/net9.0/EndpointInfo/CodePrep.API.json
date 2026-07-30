@@ -2162,7 +2162,7 @@
     "securitySchemes": {
       "Bearer": {
         "type": "http",
-        "description": "Enter your JWT token like this: Bearer {your token}",
+        "description": "Bearer {token}",
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }
