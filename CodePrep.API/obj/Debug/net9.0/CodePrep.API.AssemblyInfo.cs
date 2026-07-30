@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodePrep.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2184a446f2c229c8d10668a239a1b897554e2a2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c65304ab559fb6fa98007c364206565db151b842")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodePrep.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodePrep.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

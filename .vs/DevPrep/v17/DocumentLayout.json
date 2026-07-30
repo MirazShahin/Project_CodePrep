@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|solutionrelative:codeprep.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|solutionrelative:codeprep.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|solutionrelative:codeprep.infrastructure\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.infrastructure\\codeprep.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -50,11 +50,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "UserRepository.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Infrastructure\\Repositories\\UserRepository.cs",
               "RelativeDocumentMoniker": "CodePrep.Infrastructure\\Repositories\\UserRepository.cs",
@@ -75,8 +75,7 @@
               "RelativeToolTip": "CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-30T19:49:23.9Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T19:49:23.9Z"
             },
             {
               "$type": "Document",
@@ -112,18 +111,17 @@
               "RelativeToolTip": "CodePrep.API\\CodePrep.API.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-30T18:15:39.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-07-30T18:15:39.203Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\Program.cs",
               "RelativeDocumentMoniker": "CodePrep.API\\Program.cs",
               "ToolTip": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\Program.cs",
               "RelativeToolTip": "CodePrep.API\\Program.cs",
-              "ViewState": "AgIAAMkAAAAAAAAAAAAAwO8AAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAwAQBAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-30T18:14:25.827Z",
               "EditorCaption": ""

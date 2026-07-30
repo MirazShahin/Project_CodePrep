@@ -216,7 +216,7 @@ var app = builder.Build();
 
 
 // ==========================================
-// Automatic Database Migration (Added)
+// Automatic Database Migration
 // ==========================================
 
 using (var scope = app.Services.CreateScope())
@@ -225,7 +225,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate(); // Render start howar shathe shathe database tables toiri kore felbe
+        context.Database.Migrate();
     }
     catch (Exception ex)
     {
@@ -258,25 +258,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-<<<<<<< HEAD
 app.Run();
-=======
-// ==========================================
-// Auto-apply EF migrations (PostgreSQL)
-// ==========================================
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    try
-    {
-        db.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Failed to apply database migrations.");
-    }
-}
-
-app.Run();
->>>>>>> df2e5ff (Fix Npgsql version and add automatic database migration)
