@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|solutionrelative:codeprep.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3314CA28-B34D-4F81-920F-E521041AC7E4}|CodePrep.Application\\CodePrep.Application.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.application\\mappings\\topicmapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3314CA28-B34D-4F81-920F-E521041AC7E4}|CodePrep.Application\\CodePrep.Application.csproj|solutionrelative:codeprep.application\\mappings\\topicmapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\appsettings.json",
+              "RelativeDocumentMoniker": "CodePrep.API\\appsettings.json",
+              "ToolTip": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\appsettings.json",
+              "RelativeToolTip": "CodePrep.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-30T17:52:54.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TopicMapping.cs",
+              "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Application\\Mappings\\TopicMapping.cs",
+              "RelativeDocumentMoniker": "CodePrep.Application\\Mappings\\TopicMapping.cs",
+              "ToolTip": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Application\\Mappings\\TopicMapping.cs",
+              "RelativeToolTip": "CodePrep.Application\\Mappings\\TopicMapping.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-29T19:42:25.309Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

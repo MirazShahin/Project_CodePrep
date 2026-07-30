@@ -1,0 +1,168 @@
+@inherits LayoutComponentBase
+@inject AuthService Auth
+@inject ThemeService Theme
+@inject NavigationManager Nav
+@implements IDisposable
+
+@if (_isAuthPage)
+{
+    @Body
+}
+else
+{
+    <div class="app-shell">
+        <aside class="sidebar @(_sidebarOpen ? "open" : "")">
+            <div class="sidebar-brand">
+                <div class="logo-icon">⚡</div>
+                <span>CodePrep</span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Main</div>
+                <NavLink class="nav-item" href="/" Match="NavLinkMatch.All">
+                    <span class="nav-icon">🏠</span> Dashboard
+                </NavLink>
+                <NavLink class="nav-item" href="/topics">
+                    <span class="nav-icon">📚</span> Topics
+                </NavLink>
+                <NavLink class="nav-item" href="/problems">
+                    <span class="nav-icon">💻</span> Problems
+                </NavLink>
+                <NavLink class="nav-item" href="/codeforces">
+                    <span class="nav-icon">🏆</span> Codeforces
+                </NavLink>
+
+                <div class="nav-section-label">Learn</div>
+                <NavLink class="nav-item" href="/learning">
+                    <span class="nav-icon">📖</span> Learning Path
+                </NavLink>
+                <NavLink class="nav-item" href="/interview">
+                    <span class="nav-icon">🎤</span> Interview Prep
+                </NavLink>
+
+                <div class="nav-section-label">AI Tools</div>
+                <NavLink class="nav-item" href="/ai-tutor">
+                    <span class="nav-icon">🤖</span> AI Tutor
+                </NavLink>
+                <NavLink class="nav-item" href="/ai-assistant">
+                    <span class="nav-icon">✨</span> CP Assistant
+                </NavLink>
+            </nav>
+
+            <div class="sidebar-footer">
+                @if (Auth.IsAuthenticated && Auth.CurrentUser is not null)
+                {
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <div class="avatar">@(Auth.CurrentUser.UserName.Length > 0 ? Auth.CurrentUser.UserName[0].ToString().ToUpper() : "U")</div>
+                        <div style="overflow:hidden;">
+                            <div style="font-weight:600;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">@Auth.CurrentUser.UserName</div>
+                            <div style="font-size:.72rem;color:var(--text-muted);">@Auth.CurrentUser.Role</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline btn-sm" style="width:100%;" @onclick="Logout">
+                        Logout
+                    </button>
+                }
+                else
+                {
+                    <a href="/login" class="btn btn-primary btn-sm" style="width:100%;">Login</a>
+                }
+            </div>
+        </aside>
+
+        <div class="main-area">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="btn btn-ghost btn-icon" style="display:none;" id="menu-toggle" @onclick="ToggleSidebar">☰</button>
+                    <div class="search-bar" style="width:280px;">
+                        <span style="color:var(--text-muted);">🔍</span>
+                        <input type="text" placeholder="Search topics, problems..."
+                               @bind="_searchQuery" @bind:event="oninput"
+                               @onkeydown="OnSearchKey" />
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <button class="btn btn-ghost btn-icon" @onclick="ToggleTheme" title="Toggle theme">
+                        @(Theme.CurrentTheme == "light" ? "🌙" : "☀️")
+                    </button>
+                    @if (!Auth.IsAuthenticated)
+                    {
+                        <a href="/login" class="btn btn-outline btn-sm">Login</a>
+                        <a href="/register" class="btn btn-primary btn-sm">Sign Up</a>
+                    }
+                </div>
+            </header>
+
+            <main class="page-content">
+                @Body
+            </main>
+        </div>
+    </div>
+}
+
+<ToastHost />
+
+@code {
+    private bool _sidebarOpen;
+    private bool _isAuthPage;
+    private string _searchQuery = "";
+    private bool _initialized;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Nav.LocationChanged += OnLocationChanged;
+        Auth.OnAuthStateChanged += StateHasChanged;
+        Theme.OnThemeChanged += StateHasChanged;
+        CheckAuthPage();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Auth.InitializeAsync();
+            await Theme.InitializeAsync();
+            _initialized = true;
+            StateHasChanged();
+        }
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        CheckAuthPage();
+        _sidebarOpen = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CheckAuthPage()
+    {
+        var path = Nav.ToBaseRelativePath(Nav.Uri).ToLower();
+        _isAuthPage = path.StartsWith("login") || path.StartsWith("register");
+    }
+
+    private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
+
+    private async Task ToggleTheme() => await Theme.ToggleAsync();
+
+    private async Task Logout()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("/login");
+    }
+
+    private void OnSearchKey(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(_searchQuery))
+        {
+            Nav.NavigateTo($"/topics?q={Uri.EscapeDataString(_searchQuery)}");
+            _searchQuery = "";
+        }
+    }
+
+    public void Dispose()
+    {
+        Nav.LocationChanged -= OnLocationChanged;
+        Auth.OnAuthStateChanged -= StateHasChanged;
+        Theme.OnThemeChanged -= StateHasChanged;
+    }
+}

@@ -1,0 +1,148 @@
+@page "/"
+@rendermode InteractiveServer
+@inject AuthService Auth
+@inject ApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>Dashboard – CodePrep</PageTitle>
+
+@if (!Auth.IsAuthenticated)
+{
+    <div style="text-align:center;padding:80px 20px;">
+        <div style="font-size:3.5rem;margin-bottom:16px;">⚡</div>
+        <h1 style="font-size:2rem;font-weight:800;margin-bottom:10px;">Welcome to CodePrep</h1>
+        <p style="color:var(--text-muted);max-width:480px;margin:0 auto 28px;font-size:1.05rem;">
+            Master competitive programming, ace interviews, and level up with AI-powered learning tools.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <a href="/register" class="btn btn-primary btn-lg">Get Started Free</a>
+            <a href="/topics" class="btn btn-outline btn-lg">Browse Topics</a>
+        </div>
+
+        <div class="grid-3" style="margin-top:60px;text-align:left;max-width:900px;margin-left:auto;margin-right:auto;">
+            <div class="card card-body">
+                <div style="font-size:1.5rem;margin-bottom:8px;">🏆</div>
+                <h3 style="font-weight:700;margin-bottom:6px;">Competitive Programming</h3>
+                <p style="color:var(--text-muted);font-size:.85rem;">Practice problems by topic, track progress, and pull live Codeforces problems.</p>
+            </div>
+            <div class="card card-body">
+                <div style="font-size:1.5rem;margin-bottom:8px;">🎤</div>
+                <h3 style="font-weight:700;margin-bottom:6px;">Interview Prep</h3>
+                <p style="color:var(--text-muted);font-size:.85rem;">Curated interview questions with detailed answers across all major topics.</p>
+            </div>
+            <div class="card card-body">
+                <div style="font-size:1.5rem;margin-bottom:8px;">🤖</div>
+                <h3 style="font-weight:700;margin-bottom:6px;">AI Tutor</h3>
+                <p style="color:var(--text-muted);font-size:.85rem;">Generate personalized roadmaps, quizzes, and get code explanations instantly.</p>
+            </div>
+        </div>
+    </div>
+}
+else if (_loading)
+{
+    <LoadingSpinner Message="Loading your dashboard..." />
+}
+else
+{
+    <div class="page-header">
+        <div>
+            <h1>Hey, @(Auth.CurrentUser?.UserName ?? "Coder") 👋</h1>
+            <div class="subtitle">Here's your progress overview</div>
+        </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:28px;">
+        <div class="stat-card">
+            <div class="stat-icon purple">💻</div>
+            <div>
+                <div class="stat-value">@_dashboard?.SolvedProblems / @_dashboard?.TotalProblems</div>
+                <div class="stat-label">Problems Solved</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div>
+                <div class="stat-value">@_dashboard?.AcceptedSubmissions</div>
+                <div class="stat-label">Accepted Submissions</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon orange">📚</div>
+            <div>
+                <div class="stat-value">@_dashboard?.CompletedTopics / @_dashboard?.TotalTopics</div>
+                <div class="stat-label">Topics Completed</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon blue">📊</div>
+            <div>
+                <div class="stat-value">@_dashboard?.TotalSubmissions</div>
+                <div class="stat-label">Total Submissions</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">Recent Activity</div>
+            <div class="card-body" style="padding:0;">
+                @if (_dashboard?.RecentActivities?.Any() == true)
+                {
+                    @foreach (var a in _dashboard.RecentActivities.Take(8))
+                    {
+                        <div class="problem-row">
+                            <span>@(a.Type switch { "submission" => "📝", "problem" => "💻", "topic" => "📚", _ => "📌" })</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:600;font-size:.9rem;color:var(--text);">@a.Title</div>
+                                <div style="font-size:.75rem;color:var(--text-muted);">@a.Timestamp.ToString("MMM dd, HH:mm")</div>
+                            </div>
+                            <span class="badge @(a.Status?.ToLower() == "accepted" || a.Status?.ToLower() == "solved" ? "badge-easy" : "badge-muted")">@a.Status</span>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <EmptyState Icon="📭" Title="No activity yet" Description="Start solving problems to see your activity here." ActionText="Browse Problems" ActionUrl="/problems" />
+                }
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Quick Actions</div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <a href="/problems" class="btn btn-outline" style="justify-content:flex-start;">💻  Practice Problems</a>
+                <a href="/codeforces" class="btn btn-outline" style="justify-content:flex-start;">🏆  Codeforces Problems</a>
+                <a href="/ai-tutor" class="btn btn-outline" style="justify-content:flex-start;">🤖  Generate Learning Roadmap</a>
+                <a href="/interview" class="btn btn-outline" style="justify-content:flex-start;">🎤  Interview Questions</a>
+                <a href="/topics" class="btn btn-outline" style="justify-content:flex-start;">📚  Explore Topics</a>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private DashboardDto? _dashboard;
+    private bool _loading = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && Auth.IsAuthenticated && Auth.CurrentUser is not null)
+        {
+            try
+            {
+                _dashboard = await Api.GetDashboardAsync(Auth.CurrentUser.Id);
+            }
+            catch
+            {
+                _dashboard = new DashboardDto();
+            }
+            _loading = false;
+            StateHasChanged();
+        }
+        else if (firstRender)
+        {
+            _loading = false;
+            StateHasChanged();
+        }
+    }
+}

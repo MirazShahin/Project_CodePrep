@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodePrep.Domain\CodePrep.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="Mapster" Version="10.0.10" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="10.0.10" />
+  </ItemGroup>
+
+	<ItemGroup>
+
+		<Folder Include="Topics\Interfaces\" />
+
+		<Folder Include="UserProblem\DTOs\" />
+		<Folder Include="UserProblem\Interfaces\" />
+		<Folder Include="UserProblem\Services\" />
+	</ItemGroup>
+
+</Project>

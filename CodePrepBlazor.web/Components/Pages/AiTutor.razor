@@ -1,0 +1,123 @@
+@page "/ai-tutor"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject AuthService Auth
+@inject ToastService Toast
+@inject NavigationManager Nav
+
+<PageTitle>AI Tutor – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>AI Tutor</h1>
+        <div class="subtitle">Generate personalized roadmaps and quizzes</div>
+    </div>
+</div>
+
+@if (!Auth.IsAuthenticated)
+{
+    <div class="card card-body" style="text-align:center;padding:48px;">
+        <p style="margin-bottom:16px;color:var(--text-muted);">Please login to use AI Tutor features.</p>
+        <a href="/login" class="btn btn-primary">Login</a>
+    </div>
+}
+else
+{
+    <div class="grid-2" style="align-items:start;">
+        <div class="card">
+            <div class="card-header">Generate Learning Roadmap</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Topic</label>
+                    <input class="form-control" @bind="_roadmap.TargetTopic" placeholder="e.g. Dynamic Programming" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Skill Level</label>
+                    <select class="form-control" @bind="_roadmap.SkillLevel">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration (days)</label>
+                    <input type="number" class="form-control" @bind="_roadmap.DurationInDays" min="7" max="180" />
+                </div>
+                <button class="btn btn-primary" style="width:100%;" @onclick="GenRoadmap" disabled="@_busyRoadmap">
+                    @(_busyRoadmap ? "Generating..." : "Generate Roadmap")
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Generate Quiz</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Topic</label>
+                    <input class="form-control" @bind="_quiz.TargetTopic" placeholder="e.g. Binary Trees" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Skill Level</label>
+                    <select class="form-control" @bind="_quiz.SkillLevel">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Number of Questions</label>
+                    <input type="number" class="form-control" @bind="_quiz.TotalQuestions" min="3" max="20" />
+                </div>
+                <button class="btn btn-primary" style="width:100%;" @onclick="GenQuiz" disabled="@_busyQuiz">
+                    @(_busyQuiz ? "Generating..." : "Generate Quiz")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_result))
+    {
+        <div class="card" style="margin-top:24px;">
+            <div class="card-header">
+                <span>@_resultTitle</span>
+                <button class="btn btn-ghost btn-sm" @onclick="() => _result = null">Clear</button>
+            </div>
+            <div class="card-body ai-result" style="white-space:pre-wrap;line-height:1.75;">@_result</div>
+        </div>
+    }
+}
+
+@code {
+    private TutorRequest _roadmap = new() { TargetTopic = "Dynamic Programming", SkillLevel = "Beginner", DurationInDays = 30 };
+    private TutorRequest _quiz = new() { TargetTopic = "Arrays", SkillLevel = "Beginner", TotalQuestions = 10 };
+    private string? _result;
+    private string _resultTitle = "";
+    private bool _busyRoadmap;
+    private bool _busyQuiz;
+
+    private async Task GenRoadmap()
+    {
+        if (string.IsNullOrWhiteSpace(_roadmap.TargetTopic)) { Toast.Show("Enter a topic.", "error"); return; }
+        _busyRoadmap = true;
+        try
+        {
+            _result = await Api.GenerateRoadmapAsync(_roadmap);
+            _resultTitle = $"Roadmap: {_roadmap.TargetTopic}";
+        }
+        catch { Toast.Show("Failed to generate roadmap.", "error"); }
+        _busyRoadmap = false;
+    }
+
+    private async Task GenQuiz()
+    {
+        if (string.IsNullOrWhiteSpace(_quiz.TargetTopic)) { Toast.Show("Enter a topic.", "error"); return; }
+        _busyQuiz = true;
+        try
+        {
+            _result = await Api.GenerateQuizAsync(_quiz);
+            _resultTitle = $"Quiz: {_quiz.TargetTopic}";
+        }
+        catch { Toast.Show("Failed to generate quiz.", "error"); }
+        _busyQuiz = false;
+    }
+}

@@ -1,0 +1,48 @@
+# Visual Studio Directory / Caches
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build Results & Output (Bin and Obj)
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+[Ll]og/
+[Ll]ogs/
+
+# ASP.NET Core User Secrets & Local Settings
+appsettings.Development.json
+appsettings.Local.json
+
+# Entity Framework Core Migrations (Optional - usually keep migrations, but ignore database files)
+*.db
+*.mdf
+*.ldf
+
+# NuGet Packages & Restore Logs
+[Pp]ackages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]enchmark[Rr]esult*/
+
+# Environment variables
+.env
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store

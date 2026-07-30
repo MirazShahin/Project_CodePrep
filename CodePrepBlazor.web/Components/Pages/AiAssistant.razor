@@ -1,0 +1,100 @@
+@page "/ai-assistant"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject AuthService Auth
+@inject ToastService Toast
+
+<PageTitle>CP Assistant – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>CP Assistant</h1>
+        <div class="subtitle">AI helpers for competitive programming</div>
+    </div>
+</div>
+
+@if (!Auth.IsAuthenticated)
+{
+    <div class="card card-body" style="text-align:center;padding:48px;">
+        <p style="margin-bottom:16px;color:var(--text-muted);">Login required for AI features.</p>
+        <a href="/login" class="btn btn-primary">Login</a>
+    </div>
+}
+else
+{
+    <div class="grid-2" style="align-items:start;">
+        <div class="card">
+            <div class="card-header">Explain Code</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Language</label>
+                    <select class="form-control" @bind="_language">
+                        <option value="cpp">C++</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="csharp">C#</option>
+                        <option value="javascript">JavaScript</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Code</label>
+                    <textarea class="form-control mono" rows="12" @bind="_code" placeholder="Paste your code here..." style="font-family:var(--mono, 'JetBrains Mono', monospace);font-size:.85rem;"></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" @onclick="Explain" disabled="@_busy">
+                    @(_busy ? "Analyzing..." : "Explain Code")
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Ask AI</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Your question</label>
+                    <textarea class="form-control" rows="4" @bind="_prompt" placeholder="e.g. How does Dijkstra's algorithm work?"></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;" @onclick="Ask" disabled="@_busyAsk">
+                    @(_busyAsk ? "Thinking..." : "Ask")
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_result))
+    {
+        <div class="card" style="margin-top:24px;">
+            <div class="card-header">
+                <span>AI Response</span>
+                <button class="btn btn-ghost btn-sm" @onclick="() => _result = null">Clear</button>
+            </div>
+            <div class="card-body ai-result" style="white-space:pre-wrap;line-height:1.75;">@_result</div>
+        </div>
+    }
+}
+
+@code {
+    private string _language = "cpp";
+    private string _code = "";
+    private string _prompt = "";
+    private string? _result;
+    private bool _busy;
+    private bool _busyAsk;
+
+    private async Task Explain()
+    {
+        if (string.IsNullOrWhiteSpace(_code)) { Toast.Show("Paste some code first.", "error"); return; }
+        _busy = true;
+        try { _result = await Api.ExplainCodeAsync(_language, _code); }
+        catch { Toast.Show("Explain failed.", "error"); }
+        _busy = false;
+    }
+
+    private async Task Ask()
+    {
+        if (string.IsNullOrWhiteSpace(_prompt)) { Toast.Show("Enter a question.", "error"); return; }
+        _busyAsk = true;
+        try { _result = await Api.AskAIAsync(_prompt); }
+        catch { Toast.Show("AI request failed.", "error"); }
+        _busyAsk = false;
+    }
+}

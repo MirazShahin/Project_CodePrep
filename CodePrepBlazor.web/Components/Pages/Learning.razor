@@ -1,0 +1,93 @@
+@page "/learning"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject ToastService Toast
+
+<PageTitle>Learning Path – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Learning Path</h1>
+        <div class="subtitle">Curated content to build strong fundamentals</div>
+    </div>
+</div>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Loading learning content..." />
+}
+else if (!_items.Any())
+{
+    <EmptyState Icon="📖" Title="No learning content yet" Description="Content will appear here once added by admins." />
+}
+else
+{
+    var groups = _items.GroupBy(x => x.TopicName ?? "General").OrderBy(g => g.Key);
+    @foreach (var g in groups)
+    {
+        <div style="margin-bottom:28px;">
+            <h2 style="font-size:1.05rem;font-weight:700;margin-bottom:12px;">@g.Key</h2>
+            <div class="grid-2">
+                @foreach (var item in g.OrderBy(x => x.Order))
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                                <span class="badge badge-muted">@(item.ContentType ?? "Article")</span>
+                            </div>
+                            <h3 style="font-weight:700;margin-bottom:8px;">@item.Title</h3>
+                            <p style="color:var(--text-muted);font-size:.85rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">
+                                @(item.Content ?? "")
+                            </p>
+                            <button class="btn btn-outline btn-sm" style="margin-top:12px;" @onclick="() => Select(item)">Read more</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+
+@if (_selected is not null)
+{
+    <div class="modal-overlay" @onclick="Close">
+        <div class="modal-card" @onclick:stopPropagation="true">
+            <div class="card-header">
+                <span>@_selected.Title</span>
+                <button class="btn btn-ghost btn-icon" @onclick="Close">✕</button>
+            </div>
+            <div class="card-body" style="max-height:60vh;overflow-y:auto;white-space:pre-wrap;line-height:1.7;">
+                @(_selected.Content ?? "No content.")
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<LearningContentDto> _items = new();
+    private LearningContentDto? _selected;
+    private bool _loading = true;
+
+    [SupplyParameterFromQuery(Name = "topic")]
+    public Guid? TopicId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (TopicId.HasValue)
+                _items = await Api.GetLearningByTopicAsync(TopicId.Value);
+            else
+                _items = await Api.GetLearningContentAsync();
+        }
+        catch
+        {
+            _items = new();
+            Toast.Show("Could not load learning content.", "error");
+        }
+        _loading = false;
+    }
+
+    private void Select(LearningContentDto item) => _selected = item;
+    private void Close() => _selected = null;
+}

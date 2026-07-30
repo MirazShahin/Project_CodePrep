@@ -1,0 +1,80 @@
+@page "/login"
+@rendermode InteractiveServer
+@inject AuthService Auth
+@inject ToastService Toast
+@inject NavigationManager Nav
+
+<PageTitle>Login – CodePrep</PageTitle>
+
+<div class="auth-page">
+    <div class="auth-hero">
+        <div class="auth-hero-content">
+            <div style="font-size:2.5rem;margin-bottom:12px;">⚡</div>
+            <h1>Level up your coding skills</h1>
+            <p>Practice competitive programming, prepare for interviews, and learn with AI — all in one place.</p>
+            <div class="auth-features">
+                <div class="auth-feature"><div class="auth-feature-dot"></div> 500+ curated problems by topic</div>
+                <div class="auth-feature"><div class="auth-feature-dot"></div> Live Codeforces integration</div>
+                <div class="auth-feature"><div class="auth-feature-dot"></div> AI-powered tutor & code explainer</div>
+                <div class="auth-feature"><div class="auth-feature-dot"></div> Interview question bank</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-form-side">
+        <div class="auth-form-card">
+            <h2>Welcome back</h2>
+            <p class="subtitle">Sign in to continue your journey</p>
+
+            <EditForm Model="_model" OnValidSubmit="HandleLogin">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <InputText class="form-control" @bind-Value="_model.Email" placeholder="you@example.com" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <InputText type="password" class="form-control" @bind-Value="_model.Password" placeholder="••••••••" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(_error))
+                {
+                    <div style="background:var(--danger-soft);color:var(--danger);padding:10px 14px;border-radius:8px;font-size:.85rem;margin-bottom:16px;">
+                        @_error
+                    </div>
+                }
+
+                <button type="submit" class="btn btn-primary" style="width:100%;" disabled="@_busy">
+                    @(_busy ? "Signing in..." : "Sign In")
+                </button>
+            </EditForm>
+
+            <p style="text-align:center;margin-top:20px;font-size:.875rem;color:var(--text-muted);">
+                Don't have an account? <a href="/register" style="font-weight:600;">Sign up</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginRequest _model = new();
+    private bool _busy;
+    private string? _error;
+
+    private async Task HandleLogin()
+    {
+        _busy = true;
+        _error = null;
+
+        var (ok, msg) = await Auth.LoginAsync(_model);
+        if (ok)
+        {
+            Toast.ShowSuccess(msg);
+            Nav.NavigateTo("/");
+        }
+        else
+        {
+            _error = msg;
+        }
+        _busy = false;
+    }
+}

@@ -1,0 +1,95 @@
+@page "/problems/{Id:guid}"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject AuthService Auth
+@inject ToastService Toast
+@inject NavigationManager Nav
+
+<PageTitle>@(_problem?.Title ?? "Problem") – CodePrep</PageTitle>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Loading problem..." />
+}
+else if (_problem is null)
+{
+    <EmptyState Icon="❌" Title="Problem not found" ActionText="Back" ActionUrl="/problems" />
+}
+else
+{
+    <div class="page-header">
+        <div>
+            <a href="/problems" style="font-size:.85rem;color:var(--text-muted);">← Problems</a>
+            <h1 style="margin-top:6px;display:flex;align-items:center;gap:12px;">
+                @_problem.Title
+                <DifficultyBadge Difficulty="@_problem.Difficulty" />
+            </h1>
+            <div class="subtitle">@(_problem.TopicName ?? "General")</div>
+        </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+        <div>
+            <div class="card" style="margin-bottom:20px;">
+                <div class="card-header">Description</div>
+                <div class="card-body" style="white-space:pre-wrap;line-height:1.7;color:var(--text-secondary);">
+                    @(_problem.Description ?? "No description provided.")
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(_problem.Constraints))
+            {
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header">Constraints</div>
+                    <div class="card-body mono" style="white-space:pre-wrap;font-size:.85rem;">@_problem.Constraints</div>
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(_problem.SampleInput) || !string.IsNullOrEmpty(_problem.SampleOutput))
+            {
+                <div class="card">
+                    <div class="card-header">Sample</div>
+                    <div class="card-body">
+                        <div style="margin-bottom:12px;">
+                            <div style="font-weight:600;font-size:.8rem;margin-bottom:4px;color:var(--text-muted);">Input</div>
+                            <pre class="code-block">@_problem.SampleInput</pre>
+                        </div>
+                        <div>
+                            <div style="font-weight:600;font-size:.8rem;margin-bottom:4px;color:var(--text-muted);">Output</div>
+                            <pre class="code-block">@_problem.SampleOutput</pre>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="card">
+            <div class="card-header">Solve / Notes</div>
+            <div class="card-body">
+                <p style="color:var(--text-muted);font-size:.9rem;margin-bottom:16px;">
+                    This problem links to external judges or curated practice. Use AI tools for hints and editorials.
+                </p>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <a href="/ai-assistant" class="btn btn-primary">✨ Get AI Hint</a>
+                    <a href="/codeforces" class="btn btn-outline">🏆 Browse Codeforces</a>
+                    @if (!string.IsNullOrEmpty(_problem.Description) && _problem.Description.StartsWith("http"))
+                    {
+                        <a href="@_problem.Description" target="_blank" class="btn btn-outline">Open Problem ↗</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private ProblemDto? _problem;
+    private bool _loading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _loading = true;
+        try { _problem = await Api.GetProblemAsync(Id); }
+        catch { _problem = null; }
+        _loading = false;
+    }
+}

@@ -1,0 +1,80 @@
+@page "/topics/{Id:guid}"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject NavigationManager Nav
+
+<PageTitle>@(_topic?.Name ?? "Topic") – CodePrep</PageTitle>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Loading topic..." />
+}
+else if (_topic is null)
+{
+    <EmptyState Icon="❌" Title="Topic not found" Description="This topic may have been removed." ActionText="Back to Topics" ActionUrl="/topics" />
+}
+else
+{
+    <div class="page-header">
+        <div>
+            <a href="/topics" style="font-size:.85rem;color:var(--text-muted);">← Topics</a>
+            <h1 style="margin-top:6px;">@_topic.Name</h1>
+            <div class="subtitle">@_topic.CategoryName</div>
+        </div>
+    </div>
+
+    <div class="grid-2" style="align-items:start;">
+        <div class="card">
+            <div class="card-header">About</div>
+            <div class="card-body">
+                <p style="color:var(--text-secondary);line-height:1.7;">
+                    @(_topic.Description ?? "No description available.")
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Resources</div>
+            <div class="card-body" style="padding:0;">
+                @if (_topic.Resources?.Any() == true)
+                {
+                    @foreach (var r in _topic.Resources.OrderBy(x => x.DisplayOrder))
+                    {
+                        <a href="@r.Url" target="_blank" rel="noopener" class="problem-row" style="text-decoration:none;color:inherit;">
+                            <span>🔗</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:600;font-size:.9rem;">@r.Title</div>
+                                <div style="font-size:.75rem;color:var(--text-muted);">@(r.Type ?? "Link")</div>
+                            </div>
+                            <span style="color:var(--primary);">↗</span>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <div style="padding:24px;text-align:center;color:var(--text-muted);font-size:.9rem;">No resources yet.</div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="/problems?topic=@Id" class="btn btn-primary">💻 View Problems</a>
+        <a href="/learning?topic=@Id" class="btn btn-outline">📖 Learning Content</a>
+        <a href="/interview?topic=@Id" class="btn btn-outline">🎤 Interview Qs</a>
+    </div>
+}
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private TopicDto? _topic;
+    private bool _loading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _loading = true;
+        try { _topic = await Api.GetTopicAsync(Id); }
+        catch { _topic = null; }
+        _loading = false;
+    }
+}

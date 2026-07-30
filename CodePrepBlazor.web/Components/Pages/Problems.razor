@@ -1,0 +1,89 @@
+@page "/problems"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject ToastService Toast
+
+<PageTitle>Problems – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Problems</h1>
+        <div class="subtitle">Practice coding problems by difficulty and topic</div>
+    </div>
+</div>
+
+<div class="toolbar" style="margin-bottom:24px;display:flex;gap:12px;flex-wrap:wrap;">
+    <div class="search-bar" style="flex:1;min-width:200px;max-width:320px;">
+        <span style="color:var(--text-muted);">🔍</span>
+        <input type="text" placeholder="Filter by title..." @bind="_filter" @bind:event="oninput" />
+    </div>
+    <select class="form-control" style="width:auto;" @bind="_difficulty">
+        <option value="">All Difficulties</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+    </select>
+</div>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Loading problems..." />
+}
+else if (!Filtered.Any())
+{
+    <EmptyState Icon="💻" Title="No problems found" Description="Adjust filters or check back later." />
+}
+else
+{
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            <div class="problem-row" style="font-weight:600;font-size:.8rem;color:var(--text-muted);background:var(--bg-muted);">
+                <span style="width:28px;"></span>
+                <div style="flex:1;">Title</div>
+                <span style="width:100px;">Topic</span>
+                <span style="width:80px;text-align:center;">Difficulty</span>
+            </div>
+            @foreach (var p in Filtered)
+            {
+                <a href="/problems/@p.Id" class="problem-row" style="text-decoration:none;color:inherit;">
+                    <span>@(p.IsSolved ? "✅" : "○")</span>
+                    <div style="flex:1;font-weight:600;color:var(--text);">@p.Title</div>
+                    <span style="width:100px;font-size:.8rem;color:var(--text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@(p.TopicName ?? "—")</span>
+                    <span style="width:80px;text-align:center;"><DifficultyBadge Difficulty="@p.Difficulty" /></span>
+                </a>
+            }
+        </div>
+    </div>
+    <div style="margin-top:12px;font-size:.85rem;color:var(--text-muted);">Showing @Filtered.Count() of @_problems.Count problems</div>
+}
+
+@code {
+    private List<ProblemDto> _problems = new();
+    private bool _loading = true;
+    private string _filter = "";
+    private string _difficulty = "";
+
+    [SupplyParameterFromQuery(Name = "topic")]
+    public Guid? TopicId { get; set; }
+
+    private IEnumerable<ProblemDto> Filtered => _problems
+        .Where(p => string.IsNullOrEmpty(_filter) || p.Title.Contains(_filter, StringComparison.OrdinalIgnoreCase))
+        .Where(p => string.IsNullOrEmpty(_difficulty) || p.Difficulty.Equals(_difficulty, StringComparison.OrdinalIgnoreCase));
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (TopicId.HasValue)
+                _problems = await Api.GetProblemsByTopicAsync(TopicId.Value);
+            else
+                _problems = await Api.GetProblemsAsync();
+        }
+        catch
+        {
+            _problems = new();
+            Toast.Show("Could not load problems.", "error");
+        }
+        _loading = false;
+    }
+}

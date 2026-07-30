@@ -1,0 +1,98 @@
+@page "/interview"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject ToastService Toast
+
+<PageTitle>Interview Prep – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Interview Questions</h1>
+        <div class="subtitle">Practice common technical interview questions</div>
+    </div>
+</div>
+
+<div class="toolbar" style="margin-bottom:20px;">
+    <div class="search-bar" style="max-width:320px;">
+        <span style="color:var(--text-muted);">🔍</span>
+        <input type="text" placeholder="Filter questions..." @bind="_filter" @bind:event="oninput" />
+    </div>
+</div>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Loading interview questions..." />
+}
+else if (!Filtered.Any())
+{
+    <EmptyState Icon="🎤" Title="No questions found" />
+}
+else
+{
+    <div style="display:flex;flex-direction:column;gap:12px;">
+        @foreach (var q in Filtered)
+        {
+            var open = _expanded.Contains(q.Id);
+            <div class="card">
+                <button class="card-header" style="width:100%;cursor:pointer;background:none;border:none;text-align:left;font:inherit;color:inherit;"
+                        @onclick="() => Toggle(q.Id)">
+                    <div style="display:flex;align-items:center;gap:10px;flex:1;">
+                        <span>@(open ? "▼" : "▶")</span>
+                        <span style="font-weight:600;">@q.Question</span>
+                    </div>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        @if (!string.IsNullOrEmpty(q.Difficulty))
+                        {
+                            <DifficultyBadge Difficulty="@q.Difficulty" />
+                        }
+                        <span class="badge badge-muted">@(q.TopicName ?? q.Category ?? "General")</span>
+                    </div>
+                </button>
+                @if (open)
+                {
+                    <div class="card-body" style="border-top:1px solid var(--border);white-space:pre-wrap;line-height:1.7;color:var(--text-secondary);">
+                        @(string.IsNullOrWhiteSpace(q.Answer) ? "Answer not available yet." : q.Answer)
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<InterviewQuestionDto> _items = new();
+    private HashSet<Guid> _expanded = new();
+    private bool _loading = true;
+    private string _filter = "";
+
+    [SupplyParameterFromQuery(Name = "topic")]
+    public Guid? TopicId { get; set; }
+
+    private IEnumerable<InterviewQuestionDto> Filtered =>
+        string.IsNullOrWhiteSpace(_filter)
+            ? _items
+            : _items.Where(q => q.Question.Contains(_filter, StringComparison.OrdinalIgnoreCase)
+                             || (q.TopicName?.Contains(_filter, StringComparison.OrdinalIgnoreCase) ?? false));
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (TopicId.HasValue)
+                _items = await Api.GetInterviewByTopicAsync(TopicId.Value);
+            else
+                _items = await Api.GetInterviewQuestionsAsync();
+        }
+        catch
+        {
+            _items = new();
+            Toast.Show("Could not load interview questions.", "error");
+        }
+        _loading = false;
+    }
+
+    private void Toggle(Guid id)
+    {
+        if (!_expanded.Add(id)) _expanded.Remove(id);
+    }
+}

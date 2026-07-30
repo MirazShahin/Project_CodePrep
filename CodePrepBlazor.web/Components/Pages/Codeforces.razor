@@ -1,0 +1,91 @@
+@page "/codeforces"
+@rendermode InteractiveServer
+@inject ApiClient Api
+@inject ToastService Toast
+
+<PageTitle>Codeforces – CodePrep</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Codeforces Problems</h1>
+        <div class="subtitle">Live problems from Codeforces API</div>
+    </div>
+</div>
+
+<div class="toolbar" style="margin-bottom:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+    <div class="form-group" style="margin:0;">
+        <label class="form-label">Tag</label>
+        <input class="form-control" style="width:160px;" @bind="_tag" placeholder="e.g. dp, graphs" />
+    </div>
+    <div class="form-group" style="margin:0;">
+        <label class="form-label">Min Rating</label>
+        <input type="number" class="form-control" style="width:100px;" @bind="_minRating" />
+    </div>
+    <div class="form-group" style="margin:0;">
+        <label class="form-label">Max Rating</label>
+        <input type="number" class="form-control" style="width:100px;" @bind="_maxRating" />
+    </div>
+    <button class="btn btn-primary" @onclick="Load" disabled="@_loading">
+        @(_loading ? "Loading..." : "Fetch Problems")
+    </button>
+</div>
+
+@if (_loading)
+{
+    <LoadingSpinner Message="Fetching from Codeforces..." />
+}
+else if (!_problems.Any())
+{
+    <EmptyState Icon="🏆" Title="No problems loaded" Description="Set filters and click Fetch, or check API connectivity." />
+}
+else
+{
+    <div class="card">
+        <div class="card-body" style="padding:0;">
+            @foreach (var p in _problems)
+            {
+                <a href="@p.ProblemUrl" target="_blank" rel="noopener" class="problem-row" style="text-decoration:none;color:inherit;">
+                    <span class="badge badge-muted mono">@p.ProblemId</span>
+                    <div style="flex:1;font-weight:600;">@p.Name</div>
+                    @if (p.Rating.HasValue)
+                    {
+                        <span class="badge @(p.Rating < 1200 ? "badge-easy" : p.Rating < 1600 ? "badge-medium" : "badge-hard")">
+                            @p.Rating
+                        </span>
+                    }
+                    <div style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.75rem;color:var(--text-muted);">
+                        @string.Join(", ", p.Tags.Take(3))
+                    </div>
+                    <span style="color:var(--primary);">↗</span>
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<CodeforcesProblem> _problems = new();
+    private bool _loading;
+    private string _tag = "";
+    private int _minRating = 800;
+    private int _maxRating = 1500;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        _loading = true;
+        try
+        {
+            _problems = await Api.GetCodeforcesProblemsAsync(
+                string.IsNullOrWhiteSpace(_tag) ? null : _tag.Trim(),
+                _minRating, _maxRating);
+        }
+        catch
+        {
+            _problems = new();
+            Toast.Show("Failed to fetch Codeforces problems.", "error");
+        }
+        _loading = false;
+    }
+}

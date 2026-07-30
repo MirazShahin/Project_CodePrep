@@ -1,0 +1,15 @@
+@if (!string.IsNullOrEmpty(Difficulty))
+{
+    var cls = Difficulty.ToLower() switch
+    {
+        "easy" => "badge-easy",
+        "medium" => "badge-medium",
+        "hard" => "badge-hard",
+        _ => "badge-muted"
+    };
+    <span class="badge @cls">@Difficulty</span>
+}
+
+@code {
+    [Parameter] public string? Difficulty { get; set; }
+}
