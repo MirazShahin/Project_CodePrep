@@ -115,7 +115,8 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        npgsql => npgsql.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
 });
 
 
@@ -257,4 +258,25 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+<<<<<<< HEAD
 app.Run();
+=======
+// ==========================================
+// Auto-apply EF migrations (PostgreSQL)
+// ==========================================
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
+    {
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Failed to apply database migrations.");
+    }
+}
+
+app.Run();
+>>>>>>> df2e5ff (Fix Npgsql version and add automatic database migration)

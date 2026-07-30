@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: codeprep-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: CodePrepDb
+    ports:
+      - "5432:5432"
+    volumes:
+      - codeprep_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d CodePrepDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Optional: run API in Docker against the same Postgres
+  # api:
+  #   build: .
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     ASPNETCORE_URLS: http://+:8080
+  #     ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=CodePrepDb;Username=postgres;Password=postgres"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+volumes:
+  codeprep_pgdata:

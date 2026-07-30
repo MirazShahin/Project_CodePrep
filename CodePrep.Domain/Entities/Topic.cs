@@ -1,4 +1,5 @@
-﻿using CodePrep.Domain.Common;
+using CodePrep.Domain.Common;
+
 namespace CodePrep.Domain.Entities;
 
 public class Topic : BaseEntity
@@ -7,7 +8,6 @@ public class Topic : BaseEntity
 
     public string Description { get; set; } = string.Empty;
 
-    // Categorization-er jnno ei property-ta add korun
     public string CategoryName { get; set; } = "";
 
     public bool IsActive { get; set; } = true;
@@ -18,7 +18,9 @@ public class Topic : BaseEntity
     public ICollection<LearningContent> LearningContents { get; set; }
         = new List<LearningContent>();
 
-    public ICollection<Problem> Problems
+    public ICollection<Problem> Problems { get; set; }
         = new List<Problem>();
-    public ICollection<ResourceLink> Resources { get; set; } = new List<ResourceLink>();
+
+    public ICollection<ResourceLink> Resources { get; set; }
+        = new List<ResourceLink>();
 }

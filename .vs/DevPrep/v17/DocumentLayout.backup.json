@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.infrastructure\\codeprep.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{5068B33F-974C-4EA5-939D-CE7A6F05381E}|CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj|solutionrelative:codeprep.infrastructure\\codeprep.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}|Solution Items{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}|C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\.gitignore.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}|Solution Items{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}|solutionrelative:.gitignore.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|c:\\users\\shahin\\desktop\\sdp_codeprep\\codeprep-full-project\\codeprep.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{C5FA034E-04C0-4D84-9F18-1D42209BAE4E}|CodePrep.API\\CodePrep.API.csproj|solutionrelative:codeprep.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -38,11 +46,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CodePrep.Infrastructure",
+              "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj",
+              "ToolTip": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj",
+              "RelativeToolTip": "CodePrep.Infrastructure\\CodePrep.Infrastructure.csproj",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-30T19:49:23.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": ".gitignore.txt",
+              "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\.gitignore.txt",
+              "RelativeDocumentMoniker": ".gitignore.txt",
+              "ToolTip": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\.gitignore.txt",
+              "RelativeToolTip": ".gitignore.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-07-30T19:48:54Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "20260730182426_InitialPostgres.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Infrastructure\\Migrations\\20260730182426_InitialPostgres.cs",
               "RelativeDocumentMoniker": "CodePrep.Infrastructure\\Migrations\\20260730182426_InitialPostgres.cs",
@@ -54,7 +88,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "CodePrep.API.csproj",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\CodePrep.API.csproj",
               "RelativeDocumentMoniker": "CodePrep.API\\CodePrep.API.csproj",
@@ -62,11 +96,12 @@
               "RelativeToolTip": "CodePrep.API\\CodePrep.API.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-07-30T18:15:39.203Z"
+              "WhenOpened": "2026-07-30T18:15:39.203Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\Program.cs",
               "RelativeDocumentMoniker": "CodePrep.API\\Program.cs",
@@ -78,7 +113,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrepBlazor.web\\Program.cs",
               "RelativeDocumentMoniker": "CodePrepBlazor.web\\Program.cs",
@@ -90,7 +125,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\Dockerfile",
               "RelativeDocumentMoniker": "CodePrep.API\\Dockerfile",
@@ -102,7 +137,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.API\\appsettings.json",
               "RelativeDocumentMoniker": "CodePrep.API\\appsettings.json",
@@ -115,7 +150,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "TopicMapping.cs",
               "DocumentMoniker": "C:\\Users\\Shahin\\Desktop\\SDP_CodePrep\\CodePrep-Full-Project\\CodePrep.Application\\Mappings\\TopicMapping.cs",
               "RelativeDocumentMoniker": "CodePrep.Application\\Mappings\\TopicMapping.cs",
