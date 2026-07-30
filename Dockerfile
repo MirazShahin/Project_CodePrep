@@ -2,13 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-# Copy solution file and project files (DevPrep.sln use korun)
+# Copy solution file and ALL project files so they can be restored properly
 COPY ["DevPrep.sln", "./"]
 COPY ["CodePrep.API/CodePrep.API.csproj", "CodePrep.API/"]
+COPY ["CodePrep.Application/CodePrep.Application.csproj", "CodePrep.Application/"]
+COPY ["CodePrep.Domain/CodePrep.Domain.csproj", "CodePrep.Domain/"]
+COPY ["CodePrep.Infrastructure/CodePrep.Infrastructure.csproj", "CodePrep.Infrastructure/"]
 
-RUN dotnet restore "CodePrep.API/CodePrep.API.csproj"
+# Restore everything using the solution
+RUN dotnet restore "DevPrep.sln"
 
-# Copy everything else and build
+# Copy everything else and publish
 COPY . .
 WORKDIR "/src/CodePrep.API"
 RUN dotnet publish -c Release -o /app/publish
