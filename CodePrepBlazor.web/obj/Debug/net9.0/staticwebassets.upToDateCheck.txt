@@ -1,2 +1,0 @@
-wwwroot\css\app.css
-C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\wwwroot\css\app.css

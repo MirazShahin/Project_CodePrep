@@ -225,6 +225,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        // Explicitly ensure the connection string from configuration is utilized
         context.Database.Migrate();
     }
     catch (Exception ex)
@@ -233,6 +234,7 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while migrating the database.");
     }
 }
+
 
 
 // ==========================================

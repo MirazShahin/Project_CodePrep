@@ -53,7 +53,6 @@ C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\ob
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\CodePrepBlazor.dll
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\refint\CodePrepBlazor.dll
 C:\Users\Shahin\Desktop\SDP_CodePrep\CodePrep-Full-Project\CodePrepBlazor.web\obj\Debug\net9.0\CodePrepBlazor.pdb
